@@ -13,6 +13,8 @@ case object EmulatorInit
 case object Register
 case object StateUpdated
 case object Advance
+case object getID
+case class newAID(aID : Int)
 
 
 object HelloAkkaScala extends App {
@@ -21,6 +23,8 @@ object HelloAkkaScala extends App {
 
  
   val inbox = Inbox.create(system)
+  
+  var idGen = system.actorOf(Props[AIDGenerator],"AIDGenerator")
   
   var myBCE = system.actorOf(Props[BCE],"BroadcastEmulator")
   

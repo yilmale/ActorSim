@@ -25,4 +25,8 @@ class BCE extends Actor with ActorLogging {
        
   } 
   
+  def add (myAgent : Agent) {
+    myAgent.setContext(this)
+  }
+  
 }
