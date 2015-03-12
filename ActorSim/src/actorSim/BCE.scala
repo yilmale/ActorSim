@@ -7,6 +7,9 @@ class BCE extends Actor with ActorLogging {
   var SimExecutives = scala.collection.mutable.ListBuffer.empty[ActorRef] 
   var simExecCount=0
   def receive = {
+    case Add (myAgent)=>      
+      myAgent.tell(SetContext(self),self)
+      myAgent.tell(Init,ActorRef.noSender)
     case Register => 
       log.info("Received register messagefrom " + sender)
       SimExecutives+=sender
@@ -25,8 +28,5 @@ class BCE extends Actor with ActorLogging {
        
   } 
   
-  def add (myAgent : Agent) {
-    myAgent.setContext(this)
-  }
   
 }
