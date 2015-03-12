@@ -32,7 +32,7 @@ object HelloAkkaScala extends App {
    
   var i=0
   for(i <- 0 to 2) {
-     var myAgentRef = system.actorOf(Props(new Agent()), name= "agent")
+     var myAgentRef = system.actorOf(Props(new Agent()), name= "agent-"+i)
      myBCE.tell(Add(myAgentRef),ActorRef.noSender)
    }
   
