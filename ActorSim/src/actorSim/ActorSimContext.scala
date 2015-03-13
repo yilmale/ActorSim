@@ -11,13 +11,16 @@ case object AdvanceGranted
 case object Acknowledge
 case object EmulatorInit
 case object Register
-case object StateUpdated
+case object StateUpdateCompleted
 case object Advance
 case object getID
 case class newAID(aID : Int)
 case class Add(myAgent:ActorRef)
 case class SetContext(myContext:ActorRef)
-
+case class AddBehavior(newBehavior:Behavior)
+case object AgentSetUp
+case class Initialize(behaviors: scala.collection.mutable.ArrayBuffer[Behavior])
+case object Step
 
 object HelloAkkaScala extends App {
 

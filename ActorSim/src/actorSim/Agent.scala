@@ -17,9 +17,21 @@ class Agent extends Actor with ActorLogging {
   var agentSimExecutive : ActorRef = null;
   var agentContext : ActorRef = null
   var myLP : ActorRef = null
+  var BehaviorQ = scala.collection.mutable.ArrayBuffer.empty[Behavior]
+  setUp()
   
   def takeDown() {}
   
+  def setUp() {
+    var myC = new Condition()
+    var myT = new Behavior()
+    var r = new Rule(myC, myT)
+    addBehavior(r)
+  }
+  
+  def addBehavior(b: Behavior) {
+    BehaviorQ+=b
+  }
   
   def receive = {     
     
@@ -29,6 +41,9 @@ class Agent extends Actor with ActorLogging {
        agentSimExecutive = context.actorOf(SimExecInstantiator.props(myBCE,myLP), name= "lpex-"+AID) 
     case Init => 
        agentSimExecutive ! Init
+    case AgentSetUp =>
+        setUp()
+        myLP.tell(Initialize(BehaviorQ),self)
   }
   
 }
