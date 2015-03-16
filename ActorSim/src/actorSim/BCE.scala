@@ -16,16 +16,28 @@ class BCE extends Actor with ActorLogging {
       sender ! Acknowledge
     case EmulatorInit =>
       simExecCount=0
-    case RequestAdvance =>
-      simExecCount = simExecCount + 1
-      if (simExecCount == SimExecutives.size) self ! Advance
+    case RequestAdvance(status) =>
+      if (status==false) {
+        simExecCount = simExecCount + 1
+        if (simExecCount == SimExecutives.size) self ! Advance
+      }
+      else {
+        simExecCount = 0
+        self ! ReScan
+      }
+      
     case Advance =>
         var i=0
         for(i <- 0 to simExecCount-1) {
           SimExecutives(i) ! AdvanceGranted
         }
         simExecCount =0
-       
+    case ReScan =>
+      var i=0
+        for(i <- 0 to simExecCount-1) {
+          SimExecutives(i) ! Scan
+        }
+      
   } 
   
   

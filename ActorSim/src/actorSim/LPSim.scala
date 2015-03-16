@@ -21,25 +21,34 @@ class LPSim extends Actor with ActorLogging {
       sender ! Identify(identifyId)
     case Initialize(myB : scala.collection.mutable.ArrayBuffer[Behavior]) => 
       logicalTime=logicalTime+1
+      ActiveBehaviorQ=myB
       log.info("Advanced logical time to "+ logicalTime )
-      stateUpdateStatus=updateState(myB)
-      if (stateUpdateStatus==true) {
-        log.info("LP is sending advance request")
-        mySimExec ! StateUpdateCompleted
-      }
-   
+      stateUpdateStatus=updateState(ActiveBehaviorQ)
+      mySimExec ! StateUpdateCompleted(stateUpdateStatus)
+      
+    case Step => 
+        logicalTime=logicalTime+1
+        log.info("Advanced logical time to "+ logicalTime )
+        stateUpdateStatus=updateState(ActiveBehaviorQ)
+        mySimExec ! StateUpdateCompleted(stateUpdateStatus)
+    case Scan => 
+        log.info("Scanning local behavior" )
+        stateUpdateStatus=updateState(ActiveBehaviorQ)
+        mySimExec ! StateUpdateCompleted(stateUpdateStatus)
   }
   
   
   def updateState(bQ:scala.collection.mutable.ArrayBuffer[Behavior]) : Boolean = {
     var cycleComplete: Boolean = false
     log.info("Updating state....")
+    var aBehavior = bQ.head
+    aBehavior.action()
     Thread.sleep(1000)
   /*  while (cycleComplete==false) {
       
     }*/
    
-    true
+    false
 
   }
   

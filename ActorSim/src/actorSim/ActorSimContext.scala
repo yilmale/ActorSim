@@ -5,13 +5,13 @@ import scala.concurrent.duration._
 
 case object Init
 case object LPInit
-case object RequestAdvance
+case class RequestAdvance(status:Boolean)
 case object GrantAdvance
 case object AdvanceGranted
 case object Acknowledge
 case object EmulatorInit
 case object Register
-case object StateUpdateCompleted
+case class StateUpdateCompleted(status:Boolean)
 case object Advance
 case object getID
 case class newAID(aID : Int)
@@ -21,6 +21,8 @@ case class AddBehavior(newBehavior:Behavior)
 case object AgentSetUp
 case class Initialize(behaviors: scala.collection.mutable.ArrayBuffer[Behavior])
 case object Step
+case object ReScan
+case object Scan
 
 object HelloAkkaScala extends App {
 

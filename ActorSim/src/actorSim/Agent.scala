@@ -43,6 +43,7 @@ class Agent extends Actor with ActorLogging {
        agentSimExecutive ! Init
     case AgentSetUp =>
         setUp()
+        log.info("Agent setup is complete ")
         myLP.tell(Initialize(BehaviorQ),self)
   }
   
