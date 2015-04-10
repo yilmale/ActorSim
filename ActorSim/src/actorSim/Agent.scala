@@ -18,8 +18,7 @@ class Agent extends Actor with ActorLogging {
   var agentContext : ActorRef = null
   var myLP : ActorRef = null
   var BehaviorQ = scala.collection.mutable.ArrayBuffer.empty[Behavior]
-  setUp()
-  
+    
   def takeDown() {}
   
   def setUp() {
@@ -28,6 +27,11 @@ class Agent extends Actor with ActorLogging {
     var r = new Rule(myC, myT)
     addBehavior(r)
   }
+  
+  def step() {
+     log.info("Agent step is complete ")
+  }
+  
   
   def addBehavior(b: Behavior) {
     BehaviorQ+=b
@@ -45,6 +49,9 @@ class Agent extends Actor with ActorLogging {
         setUp()
         log.info("Agent setup is complete ")
         myLP.tell(Initialize(BehaviorQ),self)
+    case Step =>
+        step()
+        myLP.tell(Update,self)
   }
   
 }

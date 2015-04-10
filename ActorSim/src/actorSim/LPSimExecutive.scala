@@ -19,7 +19,7 @@ class LPSimExecutive (bce: ActorRef, mLP: ActorRef) extends Actor with ActorLogg
       broadcastEmulator ! RequestAdvance(status)
     case AdvanceGranted =>
        log.info("Sim Executive received advance request and granting it")
-       myLP ! Step
+       myLP ! LPStep
     case Scan =>
       myLP ! Scan
   }

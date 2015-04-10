@@ -21,8 +21,10 @@ case class AddBehavior(newBehavior:Behavior)
 case object AgentSetUp
 case class Initialize(behaviors: scala.collection.mutable.ArrayBuffer[Behavior])
 case object Step
+case object LPStep
 case object ReScan
 case object Scan
+case object Update
 
 object HelloAkkaScala extends App {
 

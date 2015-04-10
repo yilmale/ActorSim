@@ -23,14 +23,14 @@ class LPSim extends Actor with ActorLogging {
       logicalTime=logicalTime+1
       ActiveBehaviorQ=myB
       log.info("Advanced logical time to "+ logicalTime )
+      context.parent.tell(Step,self)
+    case Update => 
       stateUpdateStatus=updateState(ActiveBehaviorQ)
-      mySimExec ! StateUpdateCompleted(stateUpdateStatus)
-      
-    case Step => 
+      mySimExec ! StateUpdateCompleted(stateUpdateStatus) 
+    case LPStep => 
         logicalTime=logicalTime+1
         log.info("Advanced logical time to "+ logicalTime )
-        stateUpdateStatus=updateState(ActiveBehaviorQ)
-        mySimExec ! StateUpdateCompleted(stateUpdateStatus)
+        context.parent.tell(Step,self)
     case Scan => 
         log.info("Rescanning local behavior" )
         stateUpdateStatus=updateState(ActiveBehaviorQ)
