@@ -20,6 +20,7 @@ class LPSimExecutive (bce: ActorRef, mLP: ActorRef) extends Actor with ActorLogg
     case AdvanceGranted =>
        log.info("Sim Executive received advance request and granting it")
        myLP ! Step
-
+    case Scan =>
+      myLP ! Scan
   }
 }

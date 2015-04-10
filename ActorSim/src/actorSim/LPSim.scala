@@ -32,7 +32,7 @@ class LPSim extends Actor with ActorLogging {
         stateUpdateStatus=updateState(ActiveBehaviorQ)
         mySimExec ! StateUpdateCompleted(stateUpdateStatus)
     case Scan => 
-        log.info("Scanning local behavior" )
+        log.info("Rescanning local behavior" )
         stateUpdateStatus=updateState(ActiveBehaviorQ)
         mySimExec ! StateUpdateCompleted(stateUpdateStatus)
   }
@@ -47,8 +47,9 @@ class LPSim extends Actor with ActorLogging {
   /*  while (cycleComplete==false) {
       
     }*/
-   
-    false
+    var r = scala.util.Random
+    var myB = r.nextBoolean()
+    myB
 
   }
   

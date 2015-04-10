@@ -28,13 +28,13 @@ class BCE extends Actor with ActorLogging {
       
     case Advance =>
         var i=0
-        for(i <- 0 to simExecCount-1) {
+        for(i <- 0 to SimExecutives.size-1) {
           SimExecutives(i) ! AdvanceGranted
         }
         simExecCount =0
     case ReScan =>
       var i=0
-        for(i <- 0 to simExecCount-1) {
+        for(i <- 0 to SimExecutives.size-1) {
           SimExecutives(i) ! Scan
         }
       
