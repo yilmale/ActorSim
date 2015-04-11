@@ -12,15 +12,16 @@ class LPSimExecutive (bce: ActorRef, mLP: ActorRef) extends Actor with ActorLogg
     case Init => 
       log.info("Received intialization from Emulator")
       broadcastEmulator ! Register
-    case Acknowledge =>
+    case Acknowledge(lt) =>
       log.info("Registration with BCE is successful.. initializing SimProcess")
-      myLP ! LPInit   
+      myLP ! LPInit(lt)   
     case StateUpdateCompleted(status) =>
-      broadcastEmulator ! RequestAdvance(status)
-    case AdvanceGranted =>
-       log.info("Sim Executive received advance request and granting it")
-       myLP ! LPStep
-    case Scan =>
+      if (status==false) {broadcastEmulator ! RequestAdvance(status)}
+      else {broadcastEmulator ! OutputProduced}
+    case AdvanceGranted(lt) =>
+       //log.info("Sim Executive received advance request and granting it")
+       myLP ! LPStep(lt)
+    case ScanReq =>
       myLP ! Scan
   }
 }

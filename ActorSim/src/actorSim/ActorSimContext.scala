@@ -4,11 +4,11 @@ import akka.actor.{ ActorRef, ActorSystem, Props, Actor, Inbox, ActorLogging, Id
 import scala.concurrent.duration._
 
 case object Init
-case object LPInit
+case class LPInit(vTime: Int)
 case class RequestAdvance(status:Boolean)
 case object GrantAdvance
-case object AdvanceGranted
-case object Acknowledge
+case class AdvanceGranted(vTime:Int)
+case class Acknowledge(vTime: Int)
 case object EmulatorInit
 case object Register
 case class StateUpdateCompleted(status:Boolean)
@@ -21,10 +21,12 @@ case class AddBehavior(newBehavior:Behavior)
 case object AgentSetUp
 case class Initialize(behaviors: scala.collection.mutable.ArrayBuffer[Behavior])
 case object Step
-case object LPStep
+case class LPStep(vTime:Int)
 case object ReScan
 case object Scan
+case object ScanReq
 case object Update
+case object OutputProduced 
 
 object HelloAkkaScala extends App {
 

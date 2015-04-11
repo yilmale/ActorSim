@@ -4,6 +4,7 @@ import akka.actor.{ ActorRef, ActorSystem, Props, Actor, Inbox, ActorLogging, Id
 import scala.concurrent.duration._
 
 class BCE extends Actor with ActorLogging {
+  var logicalTime:Int= 0
   var SimExecutives = scala.collection.mutable.ListBuffer.empty[ActorRef] 
   var simExecCount=0
   def receive = {
@@ -13,29 +14,27 @@ class BCE extends Actor with ActorLogging {
     case Register => 
       log.info("Received register messagefrom " + sender)
       SimExecutives+=sender
-      sender ! Acknowledge
+      sender ! Acknowledge(logicalTime)
     case EmulatorInit =>
       simExecCount=0
     case RequestAdvance(status) =>
-      if (status==false) {
-        simExecCount = simExecCount + 1
-        if (simExecCount == SimExecutives.size) self ! Advance
-      }
-      else {
-        simExecCount = 0
-        self ! ReScan
-      }
-      
+      simExecCount = simExecCount + 1
+      if (simExecCount == SimExecutives.size) self ! Advance
+    case OutputProduced =>
+      simExecCount=0
+      self ! ReScan
     case Advance =>
+        logicalTime=logicalTime+1
+        simExecCount =0
         var i=0
         for(i <- 0 to SimExecutives.size-1) {
-          SimExecutives(i) ! AdvanceGranted
+          SimExecutives(i) ! AdvanceGranted(logicalTime)
         }
-        simExecCount =0
+        
     case ReScan =>
       var i=0
         for(i <- 0 to SimExecutives.size-1) {
-          SimExecutives(i) ! Scan
+          SimExecutives(i) ! ScanReq
         }
       
   } 
