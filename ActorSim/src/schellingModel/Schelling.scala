@@ -36,4 +36,8 @@ object Schelling extends App {
     println(str)
   }}
   
+  var x: XPoint = null
+  
+  
+  
 }

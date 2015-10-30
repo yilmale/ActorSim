@@ -27,6 +27,12 @@ case object Scan
 case object ScanReq
 case object Update
 case object OutputProduced 
+case class SetScheduler(myContext:ActorRef)
+case object Ready 
+case object ExecuteStep 
+case class XStep(vTime:Int)
+case object StepAck
+
 
 object HelloAkkaScala extends App {
 
@@ -35,15 +41,14 @@ object HelloAkkaScala extends App {
  
   val inbox = Inbox.create(system)
 
-  var myBCE = system.actorOf(Props(new BCE()),"BroadcastEmulator")
+  var myBCE = system.actorOf(Props(new SimScheduler()),"SimulationScheduler")
   
   myBCE.tell(EmulatorInit,ActorRef.noSender)
    
   var i=0
   for(i <- 0 to 2) {
-     var myAgentRef = system.actorOf(Props(new Agent()), name= "agent-"+i)
+     var myAgentRef = system.actorOf(Props(new SimAgent()), name= "agent-"+i)
      myBCE.tell(Add(myAgentRef),ActorRef.noSender)
    }
-  
   
 }
